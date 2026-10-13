@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8' />
+    <title>my First Map</title>
+    //This makes the page scale properly on phones and tablets instead of just desktops.
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    //This is needed for the map controls to work and the display to be positioned correctly.
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css" rel="stylesheet">
+    //This helps define the `mapboxgl` object used below and helps render the map.
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.js"></script>
+    <style>
+        /*This removes the default page spacing so the map can touch the window edges*/
+        body {margin: 0; padding: 0; }
+        /*This provides the container size. So the #map is pinned to the top and bottom of the window and spans the full width,
+         so the map can fill the whole screen.*/
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+   </style>
+</head>
+<body>
+    //Mapbox uses this element by the id ('map') to draw the map inside it.
+   <div id='map'></div>
+    //This is the Mapbox access token and it connects my account to Mapbox so it can load the map tiles and styles
+    //and track token usage.
+   <script>
+      mapboxgl.accessToken = 'pk.eyJ1IjoiYWV0ZWUwMDciLCJhIjoiY212NXp6NXlvMDVvdjJ6cWFsYnd6cWFnNCJ9.1oQTZGkdIv6jieOrZK9Tig';
+    //This initializes the Mapbox and renders the map inside the '#map' element.
+    //This also provides the map's starting state.
+      const mymap = new mapboxgl.Map({
+             container: 'map',
+             //style: 'mapbox://styles/mapbox/dark-v11', //This provides the map's current style.
+             //projection: 'globe', //Display the map as a globe since satellite-v9 defaults to Mercator
+             center: [-122.3484448, 47.6500587], //This is the middle of Seattle's Fremont neighborhood (Andrew)
+             zoom: 18 //This zooms in so the neighborhood and its building are visible (Andrew)
+          });
+// code from the next step will go here!
+    mymap.addControl(new mapboxgl.FullscreenControl()); //This provides a button on the top right to enter and exit full screen mode.
+    mymap.addControl(new mapboxgl.NavigationControl()); //This provides buttons to zoom in and out of the map, and a compass to reset
+                                                        //the map rotation.
+    //This loads once the map's style has finished loading, enabling us to change the map properties afterwards. 
+    mymap.on('style.load', () => {
+        //The lightPreset sets the map's lighting/time of day. It is currently set to dusk.
+        mymap.setConfigProperty('basemap', 'lightPreset', 'dusk');
+        //This shows or hides labels for points of interest such as shops,
+        //restaurants, and parks. It is currently set to false/hide.
+        mymap.setConfigProperty('basemap', 'showPointOfInterestLabels', false);
+        //This shows or hides the map's road names. (new)
+        //Change: The current map now has displayed street and road names.
+        //Effect: You can now read the street names at the current zoom level in Fremont.
+        //This feature is useful for navigation on the map, such as any instance where someone would need to find a specific street.
+        mymap.setConfigProperty('basemap', 'showRoadLabels', true);
+        // This shows or hides transit labels, such as bus stops, train stations, and transit lines. (new)
+        //Change: The current map now has labeled transit stations.
+        //Effect: You can now see which public transport is connected in the neighborhood.
+        //This feature is useful for commuters, tourists, or people without a car who need to know
+        //which public transportations connect to each other to get to a specific location.
+        mymap.setConfigProperty('basemap', 'showTransitLabels', true); 
+    });
+</script>
+</body>
+</html>
